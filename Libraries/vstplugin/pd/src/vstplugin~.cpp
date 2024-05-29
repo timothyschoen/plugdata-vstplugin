@@ -831,7 +831,7 @@ t_vsteditor::t_vsteditor(t_vstplugin& owner, bool gui)
     e_mainthread = std::this_thread::get_id();
     if (gui){
         pd_vmess(&pd_canvasmaker, gensym("canvas"), (char *)"iiiii", 0, 0, 100, 100, 10);
-        e_canvas = (t_canvas *)s__X.s_thing;
+        e_canvas = (t_canvas *)(gensym("#X")->s_thing);
         send_vmess(gensym("pop"), "i", 0);
     }
     e_clock = clock_new(this, (t_method)tick);
@@ -3675,7 +3675,7 @@ t_vstplugin::t_vstplugin(int argc, t_atom *argv){
     }
     // we already have a main inlet!
     while (--totalin){
-        inlet_new(&x_obj, &x_obj.ob_pd, &s_signal, &s_signal);
+        inlet_new(&x_obj, &x_obj.ob_pd, gensym("signal"), gensym("signal"));
     }
     // outlets:
     int totalout = 0;
@@ -3689,7 +3689,7 @@ t_vstplugin::t_vstplugin(int argc, t_atom *argv){
         x_outlets.emplace_back(out);
     }
     while (totalout--){
-        outlet_new(&x_obj, &s_signal);
+        outlet_new(&x_obj, gensym("signal"));
     }
     // additional message outlet
     x_messout = outlet_new(&x_obj, 0);
@@ -3934,7 +3934,7 @@ static void vstplugin_loadbang(t_vstplugin *x, t_floatarg action){
 
 static void vstplugin_save(t_gobj *z, t_binbuf *bb){
     t_vstplugin *x = (t_vstplugin *)z;
-    binbuf_addv(bb, "ssff", &s__X, gensym("obj"),
+    binbuf_addv(bb, "ssff", gensym("#X"), gensym("obj"),
         (float)x->x_obj.te_xpix, (float)x->x_obj.te_ypix);
     binbuf_addbinbuf(bb, x->x_obj.ob_binbuf);
     binbuf_addsemi(bb);
