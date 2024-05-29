@@ -377,9 +377,6 @@ set_target_properties(${HOST} PROPERTIES LINK_FLAGS_RELEASE -s)
 # up to CMake 3.12 we can't install targets from another directory,
 # so we export the output file path and install it as a file.
 set(HOST_PATH $<TARGET_FILE:${HOST}>)
-if (MSVC)
-    set(HOST_PDB_PATH $<TARGET_PDB_FILE:${HOST}>)
-endif()
 
 # 32-bit host
 if (BUILD_HOST32)
